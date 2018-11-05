@@ -17,6 +17,16 @@ class Task(db.Model):
         self.name = name
         self.completed = False
 
+class User(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(120))
+
+    def __init__(self, email, password):
+        self.email = email
+        self.password = password
+
 @app.route('/', methods=['POST', 'GET'])
 def index():
 
@@ -30,6 +40,14 @@ def index():
     completed_tasks = Task.query.filter_by(completed=True).all()
     return render_template('todos.html',title="Get It Done!", 
         tasks=tasks, completed_tasks=completed_tasks)
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
 
 @app.route('/delete-task', methods=['POST'])
 def delete_task():
